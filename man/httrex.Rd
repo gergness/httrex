@@ -4,7 +4,17 @@
 \alias{httrex}
 \title{Render a httrex}
 \usage{
-httrex(x = NULL, input = NULL, ...)
+httrex(
+  x = NULL,
+  input = NULL,
+  display = NULL,
+  data_out = TRUE,
+  data_in = FALSE,
+  info = FALSE,
+  ssl = FALSE,
+  hide_pkg_startup = TRUE,
+  ...
+)
 }
 \arguments{
 \item{x}{An expression. If not given, \code{httrex()} looks for code in
@@ -13,6 +23,23 @@ httrex(x = NULL, input = NULL, ...)
 \item{input}{Character. If has length one and lacks a terminating newline,
 interpreted as the path to a file containing reprex code. Otherwise,
 assumed to hold reprex code as character vector.}
+
+\item{display}{Either "inline" to indicate that the verbose output
+should be printed as inline comments or "details" which uses HTML
+tags to make expandable tags. \code{NULL} the default chooses \code{details}
+when working in a knitr context and \code{inline} otherwise.}
+
+\item{data_out}{Show data sent to server}
+
+\item{data_in}{Show data received from server}
+
+\item{info}{Show informational text from curl. This is mainly useful for debugging
+https and auth problems, so is disabled by default}
+
+\item{ssl}{Show even data sent/recieved over SSL connections?}
+
+\item{hide_pkg_startup}{Whether to override \code{library()} and \code{require()} calls
+with ones that suppress the package startup messages (Defaults to \code{TRUE}).}
 
 \item{...}{Other options passed to \code{\link[reprex:reprex]{reprex::reprex()}}}
 }

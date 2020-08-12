@@ -1,4 +1,4 @@
-#' Give verbose output
+#' Start/Stop verbose output
 #'
 #' A verbose connection provides much more information about the flow of
 #' information between the client and server. `hx_verbose()` differs
@@ -39,18 +39,78 @@
 #' * `<<` data received (in)
 #' * `<*` ssl data received (in)
 #'
+#' @param display Either "inline" to indicate that the verbose output
+#'   should be printed as inline comments or "details" which uses HTML
+#'   tags to make expandable tags. `NULL` the default chooses `details`
+#'   when working in a knitr context and `inline` otherwise.
 #' @param data_out Show data sent to server
 #' @param data_in Show data received from server
 #' @param info Show informational text from curl. This is mainly useful for debugging
 #'     https and auth problems, so is disabled by default
 #' @param ssl Show even data sent/recieved over SSL connections?
-#' @param expr An expression to be evaluated with verbose settings
-#' @param ... passed to `hx_verbose()`
 #'
-#' @return An `httr::config` object
 #' @export
-hx_verbose <- function (data_out = TRUE, data_in = FALSE, info = FALSE, ssl = FALSE) {
-    debug <- function(type, msg) {
+hx_set_verbose <- function(
+    display = NULL,
+    data_out = TRUE,
+    data_in = FALSE,
+    info = FALSE,
+    ssl = FALSE
+) {
+    if (is.null(display)) {
+        display <- ifelse(
+            isTRUE(getOption('knitr.in.progress')),
+            "details",
+            "inline"
+        )
+    }
+
+    formatting <- switch(
+        display,
+        "inline" = inline_format,
+        "details" = details_format,
+        stop(paste0(
+            "`display` must be either 'inline' or 'details', but was '", display, "'"
+        ))
+    )
+
+    formatting$initialize()
+
+    httr::set_config(hx_verbose(formatting, data_out, data_in, info, ssl))
+    options(httrex_finalize = formatting$finalize)
+}
+
+#' @rdname hx_set_verbose
+#' @export
+hx_stop_verbose <- function() {
+    httr::set_config(debugfunction = NULL, verbose = FALSE)
+    options("httrex_finalize")()
+    options(httrex_finalize = NULL)
+}
+
+hx_verbose <- function (
+    formatting,
+    data_out = TRUE,
+    data_in = FALSE,
+    info = FALSE,
+    ssl = FALSE
+) {
+    httr::config(
+        debugfunction = httrex_new_debug(formatting, data_out, data_in, info, ssl),
+        verbose = TRUE
+    )
+}
+
+
+httrex_new_debug <- function(
+    formatting,
+    data_out = TRUE,
+    data_in = FALSE,
+    info = FALSE,
+    ssl = FALSE
+) {
+
+    function(type, msg) {
         if ((knitr::opts_current$get("label") %||% "") == "setup") return()
 
         data_out <- knitr::opts_current$get("hx.data_out") %||% data_out
@@ -58,33 +118,22 @@ hx_verbose <- function (data_out = TRUE, data_in = FALSE, info = FALSE, ssl = FA
         info <- knitr::opts_current$get("hx.info") %||% info
         ssl <- knitr::opts_current$get("hx.ssl") %||% ssl
 
-        switch(
-            type + 1,
-            text = if (info) prefix_message("*  ", msg),
-            headerIn = prefix_message("<- ", msg),
-            headerOut = prefix_message("-> ", msg),
-            dataIn = if (data_in) prefix_message("<<  ", memDecompress(msg), TRUE),
-            dataOut = if (data_out) prefix_message(">> ", msg, TRUE),
-            sslDataIn = if (ssl && data_in) prefix_message("*< ", msg, TRUE),
-            sslDataOut = if (ssl && data_out) prefix_message("*> ", msg, TRUE)
-        )
+        type_string <- htypes(type)
+        if (type_string == "info" && !info) return()
+        if (type_string == "dataIn" && !data_in) return()
+        if (type_string == "dataOut" && !data_out) return()
+        if (type_string == "sslDataIn" && (!ssl || !data_in)) return()
+        if (type_string == "sslDataOut" && (!ssl || !data_out)) return()
+
+        if (type_string %in% c("dataIn")) {
+            suppressWarnings(msg <- memDecompress(msg))
+        }
+
+        msg <- readBin(msg, character())
+        msg <- gsub("\\r?\\n\\r?", "\n", msg) # standardize new line format to \n
+
+        msg <- formatting$redact_messages(type, msg)
+        msg <- formatting$format_messages(type, msg)
+        formatting$accumulate_messages(msg)
     }
-    httr::config(debugfunction = debug, verbose = TRUE)
-}
-
-#' @rdname hx_verbose
-#' @export
-with_hx_verbose <- function(expr, ...) {
-    httr::with_config(hx_verbose(...), expr)
-}
-
-
-# adapted from httr
-prefix_message <- function(prefix, x, blank_line = FALSE) {
-    x <- readBin(x, character())
-    lines <- unlist(strsplit(x, "\n", fixed = TRUE, useBytes = TRUE))
-    out <- paste0(prefix, lines, collapse = "\n")
-    cat(paste0(out, "\n"))
-    if (blank_line)
-        cat("\n")
 }

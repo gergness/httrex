@@ -38,4 +38,7 @@ Imports:
     reprex,
     clipr,
     httr,
-    knitr
+    knitr,
+    curl,
+    htmltools,
+    jsonlite
