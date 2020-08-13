@@ -18,7 +18,7 @@ prefix_message <- function(prefix, x, blank_line = FALSE) {
 
 format_msg <- function(type, msg) {
     type_string <- htypes(type)
-    if (type_string == "dataIn") {
+    if (type_string %in% c("dataIn", "dataOut")) {
         json_msg <- try(jsonlite::prettify(msg), silent = TRUE)
         if (!inherits(json_msg, "try-error")) msg <- json_msg
     }
