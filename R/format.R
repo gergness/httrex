@@ -115,9 +115,9 @@ details_finalize_msgs <- function(msgs) {
     if (length(header_msgs) == 0) {
         summary_title <- "Request"
     } else {
-        summary_title <- htmltools::htmlEscape(
-            strsplit(header_msgs[1], "\n", fixed = TRUE)[[1]][1]
-        )
+        summary_title <- strsplit(header_msgs[1], "\n", fixed = TRUE)[[1]][1]
+        summary_title <- gsub("^-> ", "", summary_title)
+        summary_title <- htmltools::htmlEscape(summary_title)
     }
 
     paste(
