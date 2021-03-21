@@ -7,7 +7,7 @@
 httrex(
   x = NULL,
   input = NULL,
-  display = NULL,
+  display = "details",
   data_out = TRUE,
   data_in = FALSE,
   info = FALSE,

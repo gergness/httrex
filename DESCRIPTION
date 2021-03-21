@@ -40,5 +40,18 @@ Imports:
     httr,
     knitr,
     curl,
+    jsonlite,
+    cli,
     htmltools,
-    jsonlite
+    later,
+    listviewer,
+    purrr,
+    readr,
+    rstudioapi,
+    stringr,
+Suggests:
+    bslib,
+    servr,
+    shiny,
+    styler,
+    lubridate
