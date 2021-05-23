@@ -29,7 +29,7 @@ start_tracing <- function(temp_dir = NULL) {
 
     app_file <- paste0(tracer_env$shiny_dir, "app.R")
     shiny_port <- servr::random_port()
-    write_lines(
+    writeLines(
         paste0(
             "httrex:::st_app('", tracer_env$shiny_dir,
             "', port = ", shiny_port, ")"
@@ -78,7 +78,7 @@ save_history <- function() {
         }
     }
     if (length(rhist) > 0) {
-        write_lines(as.character(rhist), out_file_ts)
+        writeLines(as.character(rhist), out_file_ts)
     }
     tracer_env$timestamp <- utils::timestamp(quiet = TRUE)
 }

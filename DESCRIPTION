@@ -3,26 +3,14 @@ Type: Package
 Title: Create code examples that include http requests
 Version: 0.0.0.9000
 Authors@R: 
-    c(person(given = "Greg",
-             family = "Freedman Ellis",
-             email = "greg.freedman@gmail.com",
-             role = c("aut", "cre")),   
-      person(given = "Jennifer",
-             family = "Bryan",
-             role = "ctb",
-             comment = "code adapted from reprex"),
-      person(given = "Jim",
-             family = "Hester",
-             role = "ctb",
-             comment = "code adapted from reprex"),
-      person(given = "David",
-             family = "Robinson",
-             role = "ctb",
-             comment = "code adapted from reprex"),
-      person(given = "Hadley",
-             family = "Wickham",
-             role = "ctb",
-             comment = "code adapted from reprex"))
+    c(
+        person(
+            given = "Greg",
+            family = "Freedman Ellis",
+            email = "greg.freedman@gmail.com",
+            role = c("aut", "cre")
+        )
+    )
 Description: Convenience wrapper for 'reprex'-like creation of code snippets
     that specializes in displaying the http requests made by R functions
     so that authors of R 'API' clients can communicate with the authors of 
@@ -35,10 +23,9 @@ RoxygenNote: 7.1.1
 Imports: 
     rlang,
     fs,
-    reprex,
-    clipr,
-    httr,
     knitr,
+    reprex (>=2.0),
+    httr,
     curl,
     jsonlite,
     cli,

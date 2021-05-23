@@ -7,9 +7,9 @@
 httrex(
   x = NULL,
   input = NULL,
-  display = "details",
+  wd = NULL,
   data_out = TRUE,
-  data_in = FALSE,
+  data_in = TRUE,
   info = FALSE,
   ssl = FALSE,
   hide_pkg_startup = TRUE,
@@ -24,10 +24,9 @@ httrex(
 interpreted as the path to a file containing reprex code. Otherwise,
 assumed to hold reprex code as character vector.}
 
-\item{display}{Either "inline" to indicate that the verbose output
-should be printed as inline comments or "details" which uses HTML
-tags to make expandable tags. \code{NULL} the default chooses \code{details}
-when working in a knitr context and \code{inline} otherwise.}
+\item{wd}{The working directory to run the httrex example in. Note that httrex
+must set the \code{wd} itself, but if you pass a \code{wd} it will move to your working
+directory after it's own setup.}
 
 \item{data_out}{Show data sent to server}
 

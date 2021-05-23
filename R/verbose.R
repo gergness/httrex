@@ -39,10 +39,6 @@
 #' * `<<` data received (in)
 #' * `<*` ssl data received (in)
 #'
-#' @param display Either "inline" to indicate that the verbose output
-#'   should be printed as inline comments or "details" which uses HTML
-#'   tags to make expandable tags. `NULL` the default chooses `details`
-#'   when working in a knitr context and `inline` otherwise.
 #' @param data_out Show data sent to server
 #' @param data_in Show data received from server
 #' @param info Show informational text from curl. This is mainly useful for debugging
@@ -51,28 +47,12 @@
 #'
 #' @export
 hx_set_verbose <- function(
-    display = NULL,
     data_out = TRUE,
-    data_in = FALSE,
+    data_in = TRUE,
     info = FALSE,
     ssl = FALSE
 ) {
-    if (is.null(display)) {
-        display <- ifelse(
-            isTRUE(getOption('knitr.in.progress')),
-            "details",
-            "inline"
-        )
-    }
-
-    formatting <- switch(
-        display,
-        "inline" = inline_format,
-        "details" = details_format,
-        stop(paste0(
-            "`display` must be either 'inline' or 'details', but was '", display, "'"
-        ))
-    )
+    formatting <- inline_format
 
     formatting$initialize()
 
@@ -91,7 +71,7 @@ hx_stop_verbose <- function() {
 hx_verbose <- function (
     formatting,
     data_out = TRUE,
-    data_in = FALSE,
+    data_in = TRUE,
     info = FALSE,
     ssl = FALSE
 ) {

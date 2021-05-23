@@ -5,22 +5,11 @@
 \alias{hx_stop_verbose}
 \title{Start/Stop verbose output}
 \usage{
-hx_set_verbose(
-  display = NULL,
-  data_out = TRUE,
-  data_in = FALSE,
-  info = FALSE,
-  ssl = FALSE
-)
+hx_set_verbose(data_out = TRUE, data_in = TRUE, info = FALSE, ssl = FALSE)
 
 hx_stop_verbose()
 }
 \arguments{
-\item{display}{Either "inline" to indicate that the verbose output
-should be printed as inline comments or "details" which uses HTML
-tags to make expandable tags. \code{NULL} the default chooses \code{details}
-when working in a knitr context and \code{inline} otherwise.}
-
 \item{data_out}{Show data sent to server}
 
 \item{data_in}{Show data received from server}
