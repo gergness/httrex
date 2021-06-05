@@ -63,8 +63,8 @@ hx_set_verbose <- function(
 #' @rdname hx_set_verbose
 #' @export
 hx_stop_verbose <- function() {
-    httr::set_config(debugfunction = NULL, verbose = FALSE)
-    options("httrex_finalize")()
+    httr::set_config(httr::config(debugfunction = NULL, verbose = FALSE))
+    options("httrex_finalize")[[1]]()
     options(httrex_finalize = NULL)
 }
 

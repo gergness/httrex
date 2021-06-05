@@ -43,5 +43,5 @@ inline_format <- list(
     redact_messages = redact_msg,
     format_messages = format_msg,
     accumulate_messages = function(msg) cat(paste0(msg, "\n")),
-    finalize = function() cat("\n")
+    finalize = function() {}
 )
