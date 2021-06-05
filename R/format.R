@@ -21,6 +21,11 @@ format_msg <- function(type, msg) {
     if (type_string %in% c("dataIn", "dataOut")) {
         json_msg <- try(jsonlite::prettify(msg), silent = TRUE)
         if (!inherits(json_msg, "try-error")) msg <- json_msg
+
+        # TODO: This is an ugly hack, but needed to make sure reprex doesn't
+        # die. Would be nice if it was smart enough to remove only the invalid
+        # characters.
+        if (!utf8::utf8_valid(msg)) msg <- "<REMOVED INVALID NON-UTF8 TEXT>"
     }
 
     switch(
