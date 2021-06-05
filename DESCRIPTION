@@ -24,7 +24,7 @@ Imports:
     rlang,
     fs,
     knitr,
-    reprex (>=2.0),
+    reprex (>= 2.0),
     httr,
     curl,
     jsonlite,
