@@ -97,10 +97,13 @@ copy_reprex_files <- function(wd, temp_wd) {
     # the user's original files
     files <- fs::dir_ls(
         temp_wd,
-        recurse = TRUE,
         regexp = "\\.Renviron$|\\.Rprofile",
-        invert = TRUE
+        invert = TRUE,
+        type = "file"
     )
 
     fs::file_copy(files, wd)
+
+    dirs <- fs::dir_ls(temp_wd, type = "directory")
+    fs::dir_copy(dirs, wd)
 }
