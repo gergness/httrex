@@ -1,4 +1,4 @@
-# httrex <img src="tools/logo.png" align="right" height="149" width="149"/>
+# httrex <img src="tools/logo.jpg" align="right" height="149" width="149"/>
 
 <!-- badges: start -->
 
