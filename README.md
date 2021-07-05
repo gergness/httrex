@@ -1,4 +1,4 @@
-# httrex
+# httrex <img src="tools/logo.png" align="right" height="149" width="149"/>
 
 <!-- badges: start -->
 
@@ -22,6 +22,10 @@ the API calls and responses interspersed.
 
 2) An experimental shiny gadget that tracks the code in the current R session
 and the API calls and responses.
+
+
+See my talk at useR!2021 during the first elevator pitch sessions, or the [slides](useR2021/httrex_slides_gh.pdf) for my talk.
+
 
 ## Installation
 
